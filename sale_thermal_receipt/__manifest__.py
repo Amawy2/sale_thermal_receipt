@@ -6,7 +6,9 @@
     'author': 'Ahmed Ali',
     'maintainer': 'Ahmed Ali',
     'website': 'https://github.com/amawy2/sale_thermal_receipt',
-    'license': 'LGPL-3',
+    'license': 'OPL-1',
+    'price': 10.0,
+    'currency': 'USD',
     'depends': ['sale', 'base_report_wkhtmltox'],
     'data': [
         'report/paperformat.xml',
