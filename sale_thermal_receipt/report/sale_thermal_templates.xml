@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_sale_thermal_document">
+        <t t-call="web.basic_layout">
+            <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+            <t t-set="cur" t-value="o.currency_id"/>
+            <div class="page" dir="rtl"
+                 style="font-family: 'DejaVu Sans', Tahoma, sans-serif; font-size: 11px; color: #000;">
+                <style>
+                    .tr-table { width: 100%; border-collapse: collapse; }
+                    .tr-table th { border-bottom: 1px dashed #000; padding: 2px 0; font-size: 10px; }
+                    .tr-table td { padding: 2px 0; vertical-align: top; }
+                    .tr-sep { border-top: 1px dashed #000; margin: 4px 0; }
+                    .tr-total td { font-size: 13px; font-weight: bold; }
+                </style>
+
+                <!-- Company -->
+                <div style="text-align: center;">
+                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
+                         style="max-height: 50px; max-width: 60mm;"/>
+                    <div style="font-size: 14px; font-weight: bold;" t-field="o.company_id.name"/>
+                    <div t-if="o.company_id.phone">هاتف: <span t-field="o.company_id.phone"/></div>
+                    <div t-if="o.company_id.vat">الرقم الضريبي: <span t-field="o.company_id.vat"/></div>
+                </div>
+                <div class="tr-sep"/>
+
+                <!-- Order info -->
+                <table class="tr-table">
+                    <tr><td>رقم الطلب:</td><td style="text-align: left;"><strong t-field="o.name"/></td></tr>
+                    <tr><td>التاريخ:</td><td style="text-align: left;"><span t-field="o.date_order" t-options='{"widget": "datetime"}'/></td></tr>
+                    <tr><td>العميل:</td><td style="text-align: left;"><span t-field="o.partner_id.name"/></td></tr>
+                    <tr t-if="o.user_id"><td>البائع:</td><td style="text-align: left;"><span t-field="o.user_id.name"/></td></tr>
+                </table>
+                <div class="tr-sep"/>
+
+                <!-- Lines -->
+                <table class="tr-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: right;">الصنف</th>
+                            <th style="text-align: center; width: 12mm;">الكمية</th>
+                            <th style="text-align: left; width: 20mm;">الإجمالي</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="o.order_line" t-as="l">
+                            <tr t-if="l.display_type == 'line_section'">
+                                <td colspan="3"><strong t-field="l.name"/></td>
+                            </tr>
+                            <tr t-elif="l.display_type == 'line_note'">
+                                <td colspan="3"><em t-field="l.name"/></td>
+                            </tr>
+                            <tr t-elif="not l.display_type">
+                                <td style="text-align: right;">
+                                    <span t-field="l.product_id.display_name"/>
+                                    <div style="font-size: 9px;">
+                                        <span t-field="l.price_unit" t-options='{"widget": "monetary", "display_currency": cur}'/>
+                                        <t t-if="l.discount"> - خصم <span t-field="l.discount"/>%</t>
+                                    </div>
+                                </td>
+                                <td style="text-align: center;">
+                                    <span t-esc="l.product_uom_qty" t-options='{"widget": "float", "precision": 2}'/>
+                                </td>
+                                <td style="text-align: left;">
+                                    <span t-field="l.price_subtotal" t-options='{"widget": "monetary", "display_currency": cur}'/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <div class="tr-sep"/>
+
+                <!-- Totals -->
+                <table class="tr-table">
+                    <tr><td>الإجمالي قبل الضريبة</td><td style="text-align: left;"><span t-field="o.amount_untaxed" t-options='{"widget": "monetary", "display_currency": cur}'/></td></tr>
+                    <tr><td>الضريبة</td><td style="text-align: left;"><span t-field="o.amount_tax" t-options='{"widget": "monetary", "display_currency": cur}'/></td></tr>
+                    <tr class="tr-total"><td>الإجمالي</td><td style="text-align: left;"><span t-field="o.amount_total" t-options='{"widget": "monetary", "display_currency": cur}'/></td></tr>
+                </table>
+                <div class="tr-sep"/>
+
+                <div t-if="o.note" style="font-size: 9px;" t-field="o.note"/>
+                <div style="text-align: center; margin-top: 4px;">شكراً لتعاملكم معنا</div>
+            </div>
+        </t>
+    </template>
+
+    <template id="report_sale_thermal">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="sale_thermal_receipt.report_sale_thermal_document"/>
+            </t>
+        </t>
+    </template>
+</odoo>

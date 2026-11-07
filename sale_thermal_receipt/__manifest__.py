@@ -1,0 +1,20 @@
+{
+    'name': 'Sale Thermal Receipt (80mm)',
+    'summary': 'Print Sales Orders as 80mm thermal receipts (Arabic RTL, auto page height)',
+    'version': '17.0.1.0.0',
+    'category': 'Sales/Sales',
+    'author': 'Ahmed Ali',
+    'maintainer': 'Ahmed Ali',
+    'website': 'https://github.com/amawy2/sale_thermal_receipt',
+    'license': 'LGPL-3',
+    'depends': ['sale'],
+    'data': [
+        'report/paperformat.xml',
+        'report/sale_thermal_report.xml',
+        'report/sale_thermal_templates.xml',
+        'views/sale_order_views.xml',
+    ],
+    'images': ['static/description/banner.png'],
+    'installable': True,
+    'application': False,
+}
