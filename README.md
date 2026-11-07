@@ -12,4 +12,4 @@ Copy `sale_thermal_receipt` into your addons path, update the Apps list and inst
 
 Branches: `17.0` · `18.0` · `19.0` · `20.0`
 
-Author: **Ahmed Ali** · License: LGPL-3
+Author: **Ahmed Ali** · License: OPL-1
